@@ -6,11 +6,12 @@
     <TargetFramework>net8.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
 
-    <!-- For single-file publishing -->
+    <!-- For single-file publishing (optional) -->
     <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>true</SelfContained>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-    <!-- <PublishTrimmed>true</PublishTrimmed>  (optional, if you want trimming) -->
+    <!-- <PublishTrimmed>true</PublishTrimmed> (optional, test thoroughly if you enable) -->
   </PropertyGroup>
 
 </Project>
+
