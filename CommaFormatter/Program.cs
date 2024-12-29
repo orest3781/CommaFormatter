@@ -11,6 +11,7 @@ namespace CommaFormatter
         [STAThread]
         public static void Main()
             {
+            // Standard WinForms setup
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 

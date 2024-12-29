@@ -7,13 +7,17 @@ using System.Windows.Forms;
 namespace CommaFormatter
     {
     /// <summary>
-    /// A WinForms form that formats multiline text, copies it to the clipboard,
-    /// includes a Clear button, and minimizes to the system tray.
-    /// This version uses a corporate color palette for a more cohesive style.
+    /// A WinForms form that:
+    /// 1. Formats multiline text into comma-separated text,
+    /// 2. Has a Clear button,
+    /// 3. Minimizes to system tray,
+    /// 4. Uses a modern color palette.
+    /// 
+    /// Also shows a warning if the text box is empty before formatting.
     /// </summary>
     public partial class CommaFormatterForm : Form
         {
-        // Example "corporate" color palette
+        // Example corporate color palette (tweak to your liking)
         private static readonly Color BrandPrimary = Color.FromArgb(0, 150, 136);   // Dark blue
         private static readonly Color BrandSecondary = Color.FromArgb(0, 170, 155); // Medium teal
         private static readonly Color BrandAccent = Color.FromArgb(0, 120, 110); // Gold
@@ -36,36 +40,27 @@ namespace CommaFormatter
             }
 
         /// <summary>
-        /// Sets up the form's UI controls and applies a corporate color palette.
+        /// Sets up the form's UI controls and applies the color palette.
         /// </summary>
         private void InitializeForm()
             {
-            // Form styling
+            // Basic form styling
             this.Text = "Comma Formatter";
             this.StartPosition = FormStartPosition.CenterScreen;
             this.Size = new Size(420, 320);
 
-            // A modern, fixed, non-resizable form
+            // Prevent resizing, modern flat border
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
 
-            // Corporate background color and font
+            // Light background and modern font
             this.BackColor = BrandLight;
             this.Font = new Font("Segoe UI", 9F, FontStyle.Regular);
 
-            // (Optional) Set a custom icon from the same folder
-            try
-                {
-                string iconPath = Path.Combine(AppContext.BaseDirectory, "favicon.ico");
-                if (File.Exists(iconPath))
-                    {
-                    this.Icon = new Icon(iconPath);
-                    }
-                }
-            catch
-                {
-                // Ignore if icon loading fails
-                }
+            // (Optional) If you have an icon in Project Properties => Application => Icon
+            // That icon is already embedded into the .exe.
+            // If you want the form to explicitly load the same icon, you can do:
+            // this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
 
             // Create a multiline TextBox
             textBox = new TextBox
@@ -78,17 +73,16 @@ namespace CommaFormatter
                 };
             this.Controls.Add(textBox);
 
-            // "Format & Copy" button (use double ampersand to show the '&')
+            // "Format & Copy" button
             formatAndCopyButton = new Button
                 {
-                Text = "Format && Copy",
+                Text = "Format && Copy",  // Double '&' displays single '&'
                 Size = new Size(100, 35),
                 Location = new Point(80, 200),
                 FlatStyle = FlatStyle.Flat,
                 BackColor = BrandPrimary,
                 ForeColor = Color.White
                 };
-            // Remove the default border, adjust hover/pressed colors
             formatAndCopyButton.FlatAppearance.BorderSize = 0;
             formatAndCopyButton.FlatAppearance.MouseOverBackColor = BrandSecondary;
             formatAndCopyButton.FlatAppearance.MouseDownBackColor = BrandAccent;
@@ -102,11 +96,11 @@ namespace CommaFormatter
                 Size = new Size(100, 35),
                 Location = new Point(220, 200),
                 FlatStyle = FlatStyle.Flat,
-                BackColor = BrandPrimary,
+                BackColor = BrandSecondary,
                 ForeColor = Color.White
                 };
             clearButton.FlatAppearance.BorderSize = 0;
-            clearButton.FlatAppearance.MouseOverBackColor = BrandSecondary;
+            clearButton.FlatAppearance.MouseOverBackColor = BrandPrimary;
             clearButton.FlatAppearance.MouseDownBackColor = BrandAccent;
             clearButton.Click += ClearButton_Click;
             this.Controls.Add(clearButton);
@@ -135,14 +129,13 @@ namespace CommaFormatter
                 {
                 Text = "Comma Formatter (Running)",
                 ContextMenuStrip = trayMenu,
-                Visible = false // Hidden until we minimize
+                Visible = false // Hidden until we minimize the form
                 };
 
-            // Use the same icon as the form, or default if none
-            trayIcon.Icon = this.Icon ?? SystemIcons.Application;
-
-            // Double-clicking the tray icon restores the window
-            trayIcon.DoubleClick += (s, e) => RestoreFromTray();
+            // If you haven't set an icon in Project Properties => Application,
+            // trayIcon.Icon = SystemIcons.Application;
+            // Otherwise, you can reuse the Form's icon, if set:
+            // trayIcon.Icon = this.Icon ?? SystemIcons.Application;
             }
 
         /// <summary>
@@ -150,7 +143,7 @@ namespace CommaFormatter
         /// </summary>
         protected override void OnFormClosing(FormClosingEventArgs e)
             {
-            // If the user hits 'X', hide instead of close
+            // If user tries to close the form (X button), hide it to tray
             if (e.CloseReason == CloseReason.UserClosing)
                 {
                 e.Cancel = true;
@@ -183,7 +176,7 @@ namespace CommaFormatter
             }
 
         /// <summary>
-        /// Exit the application fully (used by tray "Exit" menu).
+        /// Exit the application fully (via tray "Exit" menu).
         /// </summary>
         private void ExitApplication()
             {
@@ -223,7 +216,7 @@ namespace CommaFormatter
             // 3. Copy to clipboard
             Clipboard.SetText(formattedText);
 
-            // 4. Show confirmation
+            // 4. Show a confirmation
             MessageBox.Show(
                 "Formatted text copied to clipboard!",
                 "Success",
@@ -242,7 +235,15 @@ namespace CommaFormatter
 
         private void InitializeComponent()
             {
-
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CommaFormatterForm));
+            SuspendLayout();
+            // 
+            // CommaFormatterForm
+            // 
+            ClientSize = new Size(284, 261);
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            Name = "CommaFormatterForm";
+            ResumeLayout(false);
             }
         }
     }
