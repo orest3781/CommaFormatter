@@ -239,5 +239,10 @@ namespace CommaFormatter
             {
             textBox.Clear();
             }
+
+        private void InitializeComponent()
+            {
+
+            }
         }
     }

@@ -10,8 +10,13 @@
     <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>true</SelfContained>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <ApplicationIcon>Resources\favicon.ico</ApplicationIcon>
     <!-- <PublishTrimmed>true</PublishTrimmed> (optional, test thoroughly if you enable) -->
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\favicon.ico" />
+  </ItemGroup>
 
 </Project>
 
